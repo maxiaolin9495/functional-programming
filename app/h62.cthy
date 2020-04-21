@@ -1,0 +1,21 @@
+data List a = [] | a : List a
+data Bool = True | False
+
+length [] = 0
+length (x:xs) = 1 + length xs
+
+countGt [] ys = 0
+countGt (x:xs) [] = length (x:xs)
+countGt (x:xs) (y:ys) = if x > y then 1 + countGt (x:xs) ys else countGt (y:ys) xs
+
+axiom zeroAdd: 0 + b .=. b
+axiom addZero: b + 0 .=. b
+axiom addComm: a + b .=. b + a
+axiom addAssoc: a + (b + c) .=. (a + b) + c
+axiom ifTrue: (if True then a else b) .=. a
+axiom ifFalse: (if False then a else b) .=. b
+axiom lengthNonneg: 0 <= length xs
+axiom zeroLeOne: 0 <= 1
+axiom leAddMono: y <= z ==> x + y <= x + z
+
+goal countGt xs ys <= length xs + length ys

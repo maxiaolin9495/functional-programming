@@ -1,0 +1,77 @@
+Lemma length_length: length (xs ++ ys) .=. length xs + length ys
+
+Proof by induction on List xs
+
+Case []
+
+    To show: length ([] ++ ys) .=. length [] + length ys
+
+    Proof
+                                 length ([] ++ ys)
+        (by def ++)          .=. length ys
+
+                                 length [] + length ys
+        (by def length)      .=. 0 + length ys
+        (by zeroAdd)         .=. length ys
+    QED
+
+Case x:xs
+
+    To show: length ((x : xs) ++ ys) .=. length (x : xs) + length ys
+    IH: length (xs ++ ys) .=. length xs + length ys
+
+    Proof
+                                 length ((x:xs) ++ ys)
+        (by def ++)          .=. length (x : (xs ++ ys))
+        (by def length)      .=. 1 + length (xs ++ ys)
+        (by IH)              .=. 1 + (length xs + length ys)
+
+                             length (x:xs) + length ys
+        (by def length)      .=. (1 + length xs) + length ys
+        (by addAssoc)           .=. 1 + (length xs + length ys)
+    QED
+
+QED
+
+Lemma sum_sum2: sum (mapLength (mapAppend xs yss)) .=. sum (mapLength yss) + (length xs * length yss)
+  Proof by induction on List yss
+  Case []
+    To show: sum (mapLength (mapAppend xs [])) .=. sum (mapLength []) + (length xs * length [])
+    Proof
+                                     sum (mapLength (mapAppend xs []))
+        (by def mapAppend)       .=. sum (mapLength [])
+        (by def mapLength)       .=. sum []
+        (by def sum)             .=. 0
+                                     sum (mapLength []) + (length xs * length [])
+        (by def mapLength)       .=. sum [] + (length xs * length [])
+        (by def sum)             .=. 0 + (length xs * length [])
+        (by def length)          .=. 0 + (length xs * 0)
+        (by mulZero)             .=. 0 + (0)
+        (by addAssoc)            .=. 0 + 0
+        (by addZero)             .=. 0
+    QED
+
+  Case y:yss
+    To show: sum (mapLength (mapAppend xs (y:yss))) .=. sum (mapLength (y:yss)) + (length xs * length (y:yss))
+    IH: sum (mapLength (mapAppend xs yss)) .=. sum (mapLength yss) + (length xs * length yss)
+    Proof
+                                     sum (mapLength (mapAppend xs (y:yss)))
+        (by def mapAppend)       .=. sum (mapLength ((y ++ xs) : (mapAppend xs yss)))
+        (by def mapLength)       .=. sum ((length (y ++ xs)) : (mapLength (mapAppend xs yss)))
+        (by def sum)             .=. length (y ++ xs) + sum (mapLength (mapAppend xs yss))
+        (by IH)                  .=. length (y ++ xs) + (sum (mapLength yss) + (length xs * length yss))
+        (by addAssoc)            .=. length (y ++ xs) + sum (mapLength yss) + length xs * length yss
+        (by length_length)       .=. (length y + length xs) + sum(mapLength yss) + length xs * length yss
+
+                                     sum (mapLength (y:yss)) + (length xs * length (y:yss))
+        (by def mapLength)       .=. sum((length y):(mapLength yss)) + (length xs * length (y:yss))
+        (by def length)          .=. sum((length y):(mapLength yss)) + (length xs * (1 + length yss))
+        (by def sum)             .=. length y + sum(mapLength yss) + (length xs * (1 + length yss))
+        (by mulAdd)              .=. length y + sum(mapLength yss) + (length xs * 1 + length xs * length yss)
+        (by mulOne)              .=. length y + sum(mapLength yss) + (length xs + length xs * length yss )
+        (by addAssoc)            .=. length y + sum(mapLength yss) + length xs + length xs * length yss
+        (by addAssoc)            .=. length y + (sum(mapLength yss) + length xs) + length xs * length yss
+        (by addComm)             .=. length y + (length xs + sum(mapLength yss)) + length xs * length yss
+        (by addAssoc)            .=. (length y + length xs) + sum(mapLength yss) + length xs * length yss
+    QED
+  QED

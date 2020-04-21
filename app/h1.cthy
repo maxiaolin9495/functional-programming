@@ -1,0 +1,6 @@
+data Nat = Z | Suc Nat
+
+add Z m = m
+add (Suc n) m = Suc (add n m)
+
+goal add n m .=. add m n

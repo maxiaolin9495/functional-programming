@@ -1,0 +1,22 @@
+Lemma: abc .=. def
+    Proof by induction on List xs
+    Case []
+      To show: abc .=. def
+
+      Proof
+                             abc
+         (by def xyz)    .=. ...
+          
+      QED
+
+    Case x:xs
+      To show: abc .=. def
+      IH: xyz
+
+      Proof
+                             abc
+         (by def xyz)    .=. ...
+          
+      QED
+
+    QED

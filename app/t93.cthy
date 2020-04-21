@@ -1,0 +1,10 @@
+data Tree a = Leaf | Node (Tree a) a (Tree a)
+
+mirror Leaf = Leaf
+mirror (Node l v r) = Node (mirror r) v (mirror l)
+
+id x = x
+
+(f . g) x = f (g x)
+
+goal mirror . mirror .=. id

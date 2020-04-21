@@ -1,0 +1,19 @@
+data List a = [] | a : List a
+data Tree a = Leaf | Node (Tree a) a (Tree a)
+
+sumTree Leaf = 0
+sumTree (Node l x r) = sumTree l + x + sumTree r
+
+sum [] = 0
+sum (x:xs) = x + sum xs
+
+inorder Leaf = []
+inorder (Node l x r) = (inorder l) ++ (x : (inorder r))
+
+[] ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+
+axiom zeroAdd: 0 + b .=. b
+axiom addAssoc: a + (b + c) .=. (a + b) + c
+
+goal sum (inorder t) .=. sumTree t 

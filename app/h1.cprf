@@ -1,0 +1,64 @@
+Lemma help1: add Z m .=. add m Z
+Proof by induction on Nat m
+  Case Z
+  To show: add Z Z .=. add Z Z
+  Proof
+                      add Z Z
+      (by def add).=. Z
+                      add Z Z
+      (by def add).=. Z
+  QED
+  Case Suc m
+  To show: add Z (Suc m) .=. add (Suc m) Z
+  IH: add Z m .=. add m Z
+  Proof
+                      add Z (Suc m)
+      (by def add).=. Suc m
+                      add (Suc m) Z
+      (by def add).=. Suc (add m Z)
+      (by IH)     .=. Suc (add Z m)
+      (by def add).=. Suc m
+  QED
+QED
+
+Lemma help2: add m (Suc n) .=. Suc (add m n)
+Proof by induction on Nat m
+  Case Z
+  To show: add Z (Suc n) .=. Suc (add Z n)
+  Proof
+                      add Z (Suc n)
+      (by def add).=. Suc n
+
+                      Suc (add Z n)
+      (by def add).=. Suc n
+  QED
+  Case (Suc m)
+  To show: add (Suc m) (Suc n) .=. Suc (add (Suc m) n)
+  IH: add m (Suc n) .=. Suc (add m n)
+  Proof
+                      add (Suc m) (Suc n)
+      (by def add).=. Suc (add m (Suc n))
+      (by IH)     .=. Suc (Suc (add m n))
+      (by def add).=. Suc (add (Suc m) n)
+  QED
+QED
+Lemma result: add n m .=. add m n
+Proof by induction on Nat n
+  Case Z
+  To show: add Z m .=. add m Z
+  Proof
+                      add Z m
+      (by help1)  .=. add m Z
+  QED
+  Case Suc n
+  To show: add (Suc n) m .=. add m (Suc n)
+  IH: add n m .=. add m n
+  Proof
+                      add (Suc n) m
+      (by def add).=. Suc (add n m)
+      (by IH)     .=. Suc (add m n)
+
+                      add m (Suc n)
+      (by help2)  .=. Suc (add m n)
+  QED
+QED

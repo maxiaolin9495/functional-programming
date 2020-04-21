@@ -1,0 +1,32 @@
+Lemma mirror_mirror_eq_self: mirror (mirror t) .=. t
+Proof by induction on Tree t
+Case Leaf
+  To show: mirror (mirror Leaf) .=. Leaf
+  Proof
+                              mirror (mirror Leaf)
+      (by def mirror)     .=. mirror Leaf
+      (by def mirror)     .=. Leaf
+  QED
+Case Node l v r
+  To show: mirror (mirror (Node l v r)) .=. Node l v r
+  IHl: mirror (mirror l) .=. l
+  IHr: mirror (mirror r) .=. r
+  Proof
+                            mirror (mirror (Node l v r))
+    (by def mirror)     .=. mirror (Node (mirror r) v (mirror l))
+    (by def mirror)     .=. Node (mirror (mirror l)) v (mirror (mirror r))
+    (by IHl)            .=. Node l v (mirror (mirror r))
+    (by IHr)            .=. Node l v r
+  QED
+QED
+
+Lemma mirror_mirror_id: mirror . mirror .=. id
+Proof by extensionality with t
+  To show: (mirror . mirror) t .=. id t
+  Proof
+                                    (mirror . mirror) t
+    (by def .)                  .=. mirror (mirror t)
+    (by mirror_mirror_eq_self)  .=. t
+    (by def id)                 .=. id t
+  QED
+QED

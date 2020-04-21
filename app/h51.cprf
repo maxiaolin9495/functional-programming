@@ -1,0 +1,24 @@
+Lemma sum_sum: sum (xs ++ ys) .=. sum xs + sum ys
+  Proof by induction on List xs
+  Case []
+    To show: sum ([] ++ ys) .=. sum [] + sum ys
+    Proof
+                              sum ([] ++ ys)
+        (by def ++)       .=. sum ys
+                              sum [] + sum ys
+        (by def sum)      .=. 0 + sum ys
+        (by zeroAdd)  .=. sum ys
+    QED
+  Case x:xs
+    To show: sum ((x:xs)++ys) .=. sum (x:xs) + sum ys
+    IH: sum (xs ++ ys) .=. sum xs + sum ys
+    Proof
+                              sum((x:xs)++ys)
+        (by def ++)       .=. sum (x:(xs++ys))
+        (by def sum)      .=. x + sum (xs ++ ys)
+        (by IH)           .=. x + (sum xs + sum ys)
+                              sum(x:xs) + sum ys
+        (by def sum)      .=. x + sum xs + sum ys
+        (by addAssoc)     .=. x + (sum xs + sum ys)
+    QED
+  QED

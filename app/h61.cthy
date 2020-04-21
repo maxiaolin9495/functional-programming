@@ -1,0 +1,21 @@
+data List a = [] | a : List a
+data Bool = True | False
+
+declare_sym abs
+
+addAbsLt [] y = 0
+addAbsLt (x:xs) y = if x < y then abs x + (addAbsLt xs y) else addAbsLt xs y
+
+itAddAbsLt xs y = itAddAbsLtAux xs y 0
+
+itAddAbsLtAux [] y acc = acc
+itAddAbsLtAux (x:xs) y acc = if x < y then itAddAbsLtAux xs y (abs x + acc) else itAddAbsLtAux xs y acc
+
+axiom zeroAdd: 0 + b .=. b
+axiom addZero: b + 0 .=. b
+axiom addComm: a + b .=. b + a
+axiom addAssoc: a + (b + c) .=. (a + b) + c
+axiom ifTrue: (if True then a else b) .=. a
+axiom ifFalse: (if False then a else b) .=. b
+
+goal addAbsLt xs y .=. itAddAbsLt xs y

@@ -1,0 +1,28 @@
+data List a = [] | a : List a
+
+length [] = 0
+length (x : xs) = 1 + length xs
+
+[] ++ ys = ys
+(x : xs) ++ ys = x : (xs ++ ys)
+
+sum [] = 0
+sum (x : xs) = x + sum xs
+
+mapLength [] = []
+mapLength (x : xs) = (length x) : (mapLength xs)
+
+mapAppend xs [] = []
+mapAppend xs (y : yss) = (y ++ xs) : (mapAppend xs yss)
+
+axiom zeroAdd: 0 + b .=. b
+axiom addZero: b + 0 .=. b
+axiom addComm: a + b .=. b + a
+axiom addAssoc: a + (b + c) .=. (a + b) + c
+axiom mulZero: b * 0 .=. 0
+axiom zeroMul: 0 * b .=. 0
+axiom mulOne: a * 1 .=. a
+axiom oneMul: 1 * a .=. a
+axiom mulAdd: a * (b + c) .=. a*b + a*c
+
+goal sum (mapLength (mapAppend xs yss)) .=. sum (mapLength yss) + length xs * length yss

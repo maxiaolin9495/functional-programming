@@ -1,0 +1,68 @@
+Lemma : countGt xs ys <= length xs + length ys
+  Proof by induction on List xs
+    Case []
+      To show: countGt [] ys <= length [] + length ys
+        Proof
+                                    countGt [] ys
+            (by def countGt)     .=.0
+            (by lengthNonneg)    <= length ys
+
+                                    length [] + length ys
+            (by def length)      .=.0 + length ys
+            (by zeroAdd)         .=.length ys
+
+        QED
+    Case x:xs
+      To show: countGt (x:xs) ys <= length (x:xs) + length ys
+        Proof by induction on List ys
+          Case []
+            To show: countGt (x:xs) [] <= length (x:xs) + length []
+            Background: length xs <= length xs --given by Kappelmann in piazza
+            Proof
+                                    countGt (x:xs) []
+            (by def countGt)     .=.length (x:xs)
+            (by Background)      <= length (x:xs)
+
+                                    length (x:xs) + length []
+            (by def length)      .=.length (x:xs) + 0
+            (by addZero)         .=.length (x:xs)
+            QED
+          Case y:ys
+            To show:  countGt (x:xs) (y:ys) < = length (x:xs) + length (y:ys)
+            IH2: countGt (x:xs) (ys) <= length (x:xs) + length ys
+            Proof by case analysis on Bool x > y
+              Case True
+              Assumption: x > y .=. True
+                Proof
+                                        countGt (x:xs) (y:ys)
+                (by def countGt)     .=.if x > y then 1 + countGt (x:xs) ys else countGt (y:ys) xs
+                (by Assumption)      .=.if True then 1 + countGt (x:xs) ys else countGt (y:ys) xs
+                (by ifTrue)          .=.1 + countGt (x:xs) ys
+                (by IH2)             <= 1 + length (x:xs) + length ys
+
+                                        length (x:xs) + length (y:ys)
+                (by def length)      .=.length (x:xs) + 1 + length ys
+                (by addAssoc)        .=.(length (x:xs) + 1) + length ys
+                (by addComm)         .=.(1 + length (x:xs)) + length ys
+                (by addAssoc)        .=.1 + length (x:xs) + length ys
+                QED
+              Case False
+              Assumption: x > y .=. False
+                Proof
+                                        countGt (x:xs) (y:ys)
+                (by def countGt)     .=.if x > y then 1 + countGt (x:xs) ys else countGt (y:ys) xs
+                (by Assumption)      .=.if False then 1 + countGt (x:xs) ys else countGt (y:ys) xs
+                (by ifFalse)         .=.countGt (y:ys) xs
+                (by IH2)             <= length (y:ys) + length xs
+                (by addComm)         <= length xs + length (y:ys)
+                (by leAddMono OF zeroLeOne)       <= length xs + length (y:ys) + 1
+
+                                        length (x:xs) + length (y:ys)
+                (by def length)      .=.length (x:xs) + 1 + length ys
+                (by addAssoc)        .=.length (x:xs) + (1 + length ys)
+                (by addComm)         .=.length (x:xs) + (length ys + 1)
+                (by addAssoc)        .=.length xs + length (y:ys) + 1
+                QED
+            QED
+          QED
+  QED

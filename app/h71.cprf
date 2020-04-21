@@ -1,0 +1,56 @@
+Lemma helpL: f x (foldl f a xs) .=. foldl f (f a x) xs
+Proof by induction on List xs
+  Case []
+    To show: f x (foldl f a []) .=. foldl f (f a x) []
+      Proof
+                                    f x (foldl f a [])
+             (by def foldl)      .=.f x a
+             (by f_comm_a)       .=.f a x
+
+                                    foldl f (f a x) []
+             (by def foldl)      .=.f a x
+      QED
+
+  Case x1:xs
+    To show: f x (foldl f a (x1:xs)) .=. foldl f (f a x) (x1:xs)
+    IH: f x (foldl f a xs) .=. foldl f (f a x) xs
+      Proof
+                                    f x (foldl f a (x1:xs))
+              (by def foldl)     .=.f x (foldl f (f a x1) xs)
+              (by IH)            .=.f x (f x1 (foldl f a xs))
+              (by f_assoc)       .=.f (f x x1) (foldl f a xs)
+
+                                    foldl f (f a x) (x1:xs)
+              (by def foldl)     .=.foldl f (f (f a x) x1) xs
+              (by f_assoc)       .=.foldl f (f a (f x x1)) xs
+              (by IH)            .=.f (f x x1) (foldl f a xs)
+      QED
+QED
+
+Lemma : foldl f a .=. foldr f a
+Proof by extensionality with xs
+  To show: foldl f a xs .=. foldr f a xs
+  Proof by induction on List xs
+    Case []
+      To show: foldl f a [] .=. foldr f a []
+        Proof
+                                    foldl f a []
+            (by def foldl)       .=.a
+
+                                    foldr f a []
+            (by def foldr)       .=.a
+        QED
+    Case x:xs
+      To show: foldl f a (x:xs) .=. foldr f a (x:xs)
+      IH: foldl f a xs .=. foldr f a xs
+        Proof
+                                    foldl f a (x:xs)
+            (by def foldl)       .=.foldl f (f a x) xs
+
+                                    foldr f a (x:xs)
+            (by def foldr)       .=.f x (foldr f a xs)
+            (by IH)              .=.f x (foldl f a xs)
+            (by helpL)           .=.foldl f (f a x) xs
+        QED
+    QED
+QED

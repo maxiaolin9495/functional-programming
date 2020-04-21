@@ -1,0 +1,15 @@
+data List a = [] | a : List a
+
+foldl g b [] = b
+foldl g b (x:xs) = foldl g (g b x) xs
+
+foldr g b [] = b
+foldr g b (x:xs) = g x (foldr g b xs)
+
+declare_sym f
+declare_sym a
+
+axiom f_assoc: f x (f y z) .=. f (f x y) z
+axiom f_comm_a: f x a .=. f a x
+
+goal foldl f a .=. foldr f a

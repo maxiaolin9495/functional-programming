@@ -1,0 +1,9 @@
+data List a = [] | a : List a
+
+reverse [] = []
+reverse (x : xs) = snoc (reverse xs) x
+
+snoc [] y = [y]
+snoc (x : xs) y = x : snoc xs y
+
+goal reverse (reverse xs) .=. xs

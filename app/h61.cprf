@@ -1,0 +1,108 @@
+Lemma add_basic: itAddAbsLtAux xs y acc .=. acc + itAddAbsLtAux xs y 0
+  Proof by induction on List xs
+    Case []
+      To show: itAddAbsLtAux [] y acc .=. acc + itAddAbsLtAux [] y 0
+        Proof
+                                      itAddAbsLtAux [] y acc
+          (by def itAddAbsLtAux)  .=. acc
+
+                                      acc + itAddAbsLtAux [] y 0
+          (by def itAddAbsLtAux)  .=. acc + 0
+          (by addZero)            .=. acc
+        QED
+    Case x:xs
+      To show: itAddAbsLtAux (x:xs) y acc .=. acc + itAddAbsLtAux (x:xs) y 0
+      IH:  itAddAbsLtAux xs y acc .=. acc + itAddAbsLtAux xs y 0
+        Proof by case analysis on Bool x < y
+          Case True
+          Assumption: x < y .=. True
+          Proof
+                                      itAddAbsLtAux (x:xs) y acc
+          (by def itAddAbsLtAux)  .=. if x < y then itAddAbsLtAux xs y (abs x + acc) else itAddAbsLtAux xs y acc
+          (by Assumption)         .=. if True then itAddAbsLtAux xs y (abs x + acc) else itAddAbsLtAux xs y acc
+          (by ifTrue)             .=. itAddAbsLtAux xs y (abs x + acc)
+          (by IH)                 .=. abs x + acc + itAddAbsLtAux xs y 0
+
+                                      acc + itAddAbsLtAux (x:xs) y 0
+          (by def itAddAbsLtAux)  .=. acc + if x < y then itAddAbsLtAux xs y (abs x + 0) else itAddAbsLtAux xs y 0
+          (by Assumption)         .=. acc + if True then itAddAbsLtAux xs y (abs x + 0) else itAddAbsLtAux xs y 0
+          (by ifTrue)             .=. acc + itAddAbsLtAux xs y (abs x + 0)
+          (by addZero)            .=. acc + itAddAbsLtAux xs y (abs x)
+          (by IH)                 .=. acc + (abs x + itAddAbsLtAux xs y 0)
+          (by addAssoc)           .=. acc + abs x + itAddAbsLtAux xs y 0
+          (by addComm)            .=. abs x + acc + itAddAbsLtAux xs y 0
+
+          QED
+          Case False
+          Assumption: x < y .=. False
+          Proof
+                                      itAddAbsLtAux (x:xs) y acc
+          (by def itAddAbsLtAux)  .=. if x < y then itAddAbsLtAux xs y (abs x + acc) else itAddAbsLtAux xs y acc
+          (by Assumption)         .=. if False then itAddAbsLtAux xs y (abs x + acc) else itAddAbsLtAux xs y acc
+          (by ifFalse)             .=. itAddAbsLtAux xs y acc
+          (by IH)                 .=. acc + itAddAbsLtAux xs y 0
+
+                                      acc + itAddAbsLtAux (x:xs) y 0
+          (by def itAddAbsLtAux)  .=. acc + if x < y then itAddAbsLtAux xs y (abs x + 0) else itAddAbsLtAux xs y 0
+          (by Assumption)         .=. acc + if False then itAddAbsLtAux xs y (abs x + 0) else itAddAbsLtAux xs y 0
+          (by ifFalse)             .=. acc + itAddAbsLtAux xs y 0
+          QED
+        QED
+  QED
+
+
+Lemma add: addAbsLt xs y .=. itAddAbsLt xs y
+  Proof by induction on List xs
+    Case []
+      To show: addAbsLt [] y .=. itAddAbsLt [] y
+        Proof
+                                      addAbsLt [] y
+          (by def addAbsLt)           .=. 0
+                                      itAddAbsLt [] y
+          (by def itAddAbsLt)         .=. itAddAbsLtAux [] y 0
+          (by def itAddAbsLtAux)      .=. 0
+        QED
+    Case x:xs
+      To show: addAbsLt (x:xs) y .=. itAddAbsLt (x:xs) y
+      IH:  addAbsLt xs y .=. itAddAbsLt xs y
+        Proof by case analysis on Bool x < y
+          Case True
+          Assumption: x < y .=. True
+          Proof
+                                      addAbsLt (x:xs) y
+          (by def addAbsLt)       .=. if x < y then abs x + (addAbsLt xs y) else addAbsLt xs y
+          (by Assumption)         .=. if True then abs x + (addAbsLt xs y) else addAbsLt xs y
+          (by ifTrue)             .=. abs x + (addAbsLt xs y)
+          (by IH)                 .=. abs x + (itAddAbsLt xs y)
+          (by def itAddAbsLt)     .=. abs x + (itAddAbsLtAux xs y 0)
+          (by addAssoc)           .=. abs x + itAddAbsLtAux xs y 0
+
+                                      itAddAbsLt (x:xs) y
+          (by def itAddAbsLt)     .=. itAddAbsLtAux (x:xs) y 0
+          (by def itAddAbsLtAux)  .=. if x < y then itAddAbsLtAux xs y (abs x + 0) else itAddAbsLtAux xs y 0
+          (by Assumption)         .=. if True then itAddAbsLtAux xs y (abs x + 0) else itAddAbsLtAux xs y 0
+          (by ifTrue)             .=. itAddAbsLtAux xs y (abs x + 0)
+          (by addZero)            .=. itAddAbsLtAux xs y (abs x)
+          (by add_basic)          .=. abs x + itAddAbsLtAux xs y 0
+          QED
+
+          Case False
+          Assumption: x < y .=. False
+          Proof
+                                      addAbsLt (x:xs) y
+          (by def addAbsLt)       .=. if x < y then abs x + (addAbsLt xs y) else addAbsLt xs y
+          (by Assumption)         .=. if False then abs x + (addAbsLt xs y) else addAbsLt xs y
+          (by ifFalse)             .=. addAbsLt xs y
+          (by IH)                 .=. itAddAbsLt xs y
+          (by def itAddAbsLt)     .=. itAddAbsLtAux xs y 0
+
+                                      itAddAbsLt (x:xs) y
+          (by def itAddAbsLt)     .=. itAddAbsLtAux (x:xs) y 0
+          (by def itAddAbsLtAux)  .=. if x < y then itAddAbsLtAux xs y (abs x + 0) else itAddAbsLtAux xs y 0
+          (by Assumption)         .=. if False then itAddAbsLtAux xs y (abs x + 0) else itAddAbsLtAux xs y 0
+          (by ifFalse)             .=. itAddAbsLtAux xs y 0
+          QED
+
+
+        QED
+  QED
